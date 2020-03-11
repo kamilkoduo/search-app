@@ -1,0 +1,34 @@
+version: '3'
+services:
+  python:
+    image: docker.pkg.github.com/kamilkoduo/search-app/python:local
+    command: python web/main.py
+    ports:
+      - 80:80
+    #    volumes:
+    #      - .:/app
+    #    depends_on:
+    #      - postgres
+    restart: always
+    environment:
+      DEBUG: 'True'
+    networks:
+      - project
+      - redis-net
+
+  redis:
+    image: redis:5.0.7-alpine
+    command: ["redis-server"]
+    hostname: redis
+    networks:
+      - redis-net
+    volumes:
+      - redis-data:/data
+
+volumes:
+  db_data:
+  redis-data:
+
+networks:
+  project:
+  redis-net:
