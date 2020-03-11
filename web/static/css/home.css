@@ -1,0 +1,8 @@
+body {
+  background-color: paleturquoise;
+  margin: auto;
+  width: 50%;
+  border: 3px solid navy;
+  /* top, right, bottom and left padding  */
+  padding: 100px 100px 100px 100px;
+}

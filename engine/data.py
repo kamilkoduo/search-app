@@ -1,13 +1,11 @@
-import ssl
-from pathlib import Path
 import fileinput
 import glob
-
 import nltk
 import os
-import re
+from pathlib import Path
 
 from nltk.corpus import reuters
+from engine.utils import ssl_fix
 
 
 class Collection():
@@ -20,17 +18,21 @@ class Collection():
         return self.path_list
 
     def download(self):
-        try:
-            _create_unverified_https_context = ssl._create_unverified_context
-        except AttributeError:
-            pass
-        else:
-            ssl._create_default_https_context = _create_unverified_https_context
+        ssl_fix()
         nltk.download('reuters')
 
         for id, doc_id in enumerate(reuters.fileids()):
             with open(os.path.join(self.raw, str(id)), 'w+') as file:
                 file.write(reuters.raw(doc_id))
+
+    def load_doc(self, id):
+        with open(os.path.join(self.raw, str(id))) as file:
+            return file.read()
+
+    def load_line(self, id, line):
+        with open(os.path.join(self.raw, str(id)), 'r') as file:
+            t = file.readlines()[line-1]
+            return t
 
 
 class Stream(object):
@@ -70,13 +72,14 @@ class LineStream(Stream):
     def __call__(self, *args, **kwargs):
         batch = []
         for i in range(self.batch_len):
-            batch.append(self.next_line())
-        return tuple(batch)
+            line = self.next_line()
+            if line is None:
+                break
+            batch.append(line)
+        return tuple(batch) if len(batch) > 0 else None
 
 
 if __name__ == '__main__':
-    # import ssl
-    #
     col = Collection()
     stream = LineStream(col.paths())
     stream.open()

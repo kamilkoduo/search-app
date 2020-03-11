@@ -1,14 +1,27 @@
 import re
+import ssl
+
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+from engine.utils import ssl_fix
 
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('wordnet')
+ssl_fix()
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords')
+try:
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('wordnet')
 
 
-def normalize(self, text):
+def normalize(text):
     lower = text.lower()
     letters = re.sub(r'[^a-z\*]', ' ', lower)
     spaces_once = re.sub(r'\s+', ' ', letters)

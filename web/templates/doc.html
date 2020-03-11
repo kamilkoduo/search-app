@@ -1,0 +1,16 @@
+{% extends "general.html" %}
+
+{% block content%}
+    <h3>Document</h3>
+    <div><b>ID</b>: {{id}}</div>
+    <div><b>Line</b>: {{line}}</div>
+    <div><b>Title</b>: {{lines[0]}}</div>
+    <hr>
+    {% for i in range(lines|length) %}
+        {% if i==line-1 %}
+            <span style="background-color: #FFFF00">{{lines[i]}}</span>
+        {% else %}
+            {{lines[i]}}
+        {% endif %}
+        {% endfor %}
+{% endblock %}

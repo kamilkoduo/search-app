@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+
+{% block results%}
+        {% for id,line,text in postings%}
+        <div> <a href="/doc?id={{id}}&line={{line}}"><b>{{text}}</b> {{ id,line }}</a></div>
+        <hr>
+        {% endfor %}
+{% endblock %}

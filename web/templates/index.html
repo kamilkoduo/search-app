@@ -1,0 +1,14 @@
+{% extends "general.html" %}
+
+{% block content%}
+        <h1>Lucky you! </h1>
+        <b>IR assignment by Kamil Akhmetov, B17-DS-01</b>
+        <hr>
+        <div>Try it here</div>
+        <form method="POST">
+            <input name="query">
+            <input type="submit">
+        </form>
+        <div>Search Results:</div>
+        {% block results%}{% endblock %}s
+{% endblock %}
